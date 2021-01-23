@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block titulo %} Listagem {% endblock titulo %}
+
+{% block conteudo %}
+    {% for i in dados %}
+    <p>{{ i.nome }} {{ i.sobrenome }} {{ i.usuario }} {{ i.senha }}</p>
+    {% endfor %}
+{% endblock %}

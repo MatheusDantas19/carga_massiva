@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block titulo %} Cadastrar {% endblock titulo %}
+
+{% block conteudo %}
+    <form method="POST">
+        {% csrf_token %}
+        <div>
+            {{ form.nome.errors }}
+            <label for="">Nome: </label>
+            {{ form.nome }}
+        </div>
+
+        <div>
+            {{ form.sobrenome.errors }}
+            <label for="">Sobrenome: </label>
+            {{ form.sobrenome }}
+        </div>
+
+        <div>
+            {{ form.usuario.errors }}
+            <label for="">Usuario: </label>
+            {{ form.usuario }}
+        </div>
+
+        <div>
+            {{ form.senha.errors }}
+            <label for="">Senha: </label>
+            {{ form.senha }}
+        </div>
+
+        <div>
+            <label for="">Confirmar Senha: </label>
+            <input type="text">
+        </div>
+
+        <input type="submit" name="" id="">
+    </form>
+{% endblock conteudo %}
