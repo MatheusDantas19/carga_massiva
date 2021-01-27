@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block titulo %} Login {% endblock titulo %}
+
+{% block conteudo %}
+
+<h2>Login</h2>
+
+{% for message in messages%}
+    <div class="alert alert-danger" role="alert">
+        {{message}}
+    </div>
+{% endfor %}
+<form method="POST">
+    {% csrf_token %}
+
+    {{form.errors}}
+
+    {{ form|crispy }}
+    
+    <input type="submit" class="btn btn-success" name="" id="">
+    
+</form>
+
+
+{% endblock conteudo %}
