@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'usuarios',
     'crispy_forms',
-    'usuarios.apps.UsuariosConfig'
+    'usuarios',
+    'c_massiva'
 ]
 
 MIDDLEWARE = [
@@ -77,14 +78,14 @@ WSGI_APPLICATION = 'aplicacao.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'django',
-    #     'USER': 'postgres',
-    #     'PASSWORD': '123456',
-    #     'HOST': 'localhost',
-    #     'PORT': '5432'
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'carga_massiva',
+        'USER': 'postgres',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    }
 }
 
 
@@ -128,8 +129,8 @@ STATIC_URL = '/static/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR,'aplicacao/static')
-# ]
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
 
-AUTH_USER_MODEL = 'usuarios.Usuario'
+# AUTH_USER_MODEL = ''

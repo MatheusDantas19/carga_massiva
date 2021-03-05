@@ -1,32 +1,27 @@
-from django.contrib.auth import forms
-# from django.contrib.auth.models import User
+from django import forms
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import Usuario
 
-class UsuarioForm(UserCreationForm):
+class UserRegisterForms(UserCreationForm):
+    first_name = forms.CharField(required=True, label='Primeiro Nome', max_length=20)
+    last_name = forms.CharField(required=True, label='Sobrenome', max_length=20)
+    username = forms.CharField(required=True, label='Usuario', max_length=20)
+
     class Meta:
-        model = Usuario
+        model = User
         fields = ("first_name", "last_name", "username", "password1", "password2")
 
-# class UserCreationForm(forms.UserCreationForm):
-#     class Meta(forms.UserCreationForm.Meta):
-#         model = Usuario
+    def clean_username(self):
+        username = self.cleaned_data['username']
 
-# class UserChangeForm(forms.UserChangeForm):
-#     class Meta(forms.UserChangeForm.Meta):
-#         model = Usuario
-        
-# from .models import Usuario
 
-# class UsuarioForm(forms.ModelForm):
-#     senha = forms.CharField(widget=forms.PasswordInput)
-#     class Meta:
-#         model = Usuario
-#         fields = ("nome", "sobrenome", "usuario", "senha")
+        try:
+            u = User.objects.get(username=username)
+        except:
+            u = None
 
-# class LoginForm(forms.ModelForm):
-#     class Meta:
-#         model = Usuario
-#         fields = ("usuario", "senha")
+        if u is not None:
+            raise forms.ValidationError("Já existe um usuário com esse nome")
 
+        return username

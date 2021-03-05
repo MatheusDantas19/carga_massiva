@@ -1,65 +1,59 @@
 from django.shortcuts import render, redirect
-from .models import Usuario
-from .forms import UsuarioForm
+from .forms import UserRegisterForms
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
+from django.contrib.auth.hashers import make_password
 
 
 # Create your views here.
-@login_required(login_url='/login')
-def listarUsuario(request):
-    
-    return render(request, 'listar.html', {'dados': request.session['usuario']})
 
 def cadastrarUsuario(request):
-    list(messages.get_messages(request))
-
     if request.user.is_authenticated:
-        return redirect('listar_usuario')
+        return redirect('cmassiva_dashboard')
 
     if request.method == "POST":
-        form = UsuarioForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.info(request,"Cadastro realizado com sucesso")
+        form = UserRegisterForms(request.POST)
+        if form.is_valid(): #valida o formulairo
 
-    form = UsuarioForm()
-    return render(request, 'cadastro.html', {'form': form })
+            user = form.save(commit=False)
+            user.password = make_password(form.cleaned_data['password1'])
+            user.save()
+
+            messages.info(request, "Cadastro realizado com sucesso")
+
+        else:
+            return render(request, 'cadastro.html', {'form': form})
+
+    form = UserRegisterForms()
+    return render(request, 'cadastro.html', {'form': form})
+
 
 def loginUsuario(request):
-    list(messages.get_messages(request))
-
     if request.user.is_authenticated:
-        return redirect('listar_usuario')
+        return redirect('cmassiva_dashboard')
 
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        
+
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
-            request.session['usuario'] = username
+            request.session['user'] = username
 
-            return redirect('listar_usuario')
-        else: 
+            return redirect('cmassiva_dashboard')
+
+        else:
             messages.info(request, "As informações de login estão incorretas")
 
     form_login = AuthenticationForm()
-    return render(request, 'login.html',  {'form': form_login})
-    
-@login_required(login_url='/login')
-def logoutUsuario(request):
-    logout(request)
-    del request.session['usuario']
-    return redirect('login')
+    return render(request, 'login.html', {'form': form_login})
+
 
 def index(request):
     if request.user.is_authenticated:
-        return render(request, 'index.html', {'dados': request.session['usuario']})
+        return redirect('cmassiva_dashboard')
 
-    else:
-        return redirect('login')
+    return redirect('login')
