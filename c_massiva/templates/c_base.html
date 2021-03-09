@@ -17,14 +17,14 @@
 <body>
     <nav class="navbar navbar-expand navbar-dark bg-dark mb-3" style="background-color: #008000;">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'index' %}">Carga Massiva</a>
+            <a class="navbar-brand" href="{% url 'cmassiva_dashboard' %}">Carga Massiva</a>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link disabled"  href=""><img src="{% static 'c_massiva/img/user.svg' %}"> Matheus{{dados}}</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="">Gerador de carga</a>
+                    <a class="nav-link" href="{% url 'cmassiva_gerarcarga' %}">Gerador de carga</a>
                 </li>
 
                 <li class="nav-item">

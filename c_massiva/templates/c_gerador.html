@@ -1,0 +1,27 @@
+{% extends 'c_base.html' %}
+{% load crispy_forms_tags  %}
+
+{% block titulo %} Gerador de carga massiva {% endblock titulo %}
+
+{% block conteudo %}
+
+<h1 class="text-center">Gerador de Carga Massiva</h1>
+
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ form|crispy }}
+
+    <div>
+        <a href="" class="badge badge-success">Baixar modelo alunorel.csv</a>
+    </div>
+
+    <div>
+        <button class="btn btn-success" type="submit">Gerar carga</button>
+    </div>
+
+</form>
+
+
+{% endblock conteudo %}
