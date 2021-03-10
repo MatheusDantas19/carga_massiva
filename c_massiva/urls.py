@@ -7,7 +7,8 @@ from .views import *
 urlpatterns = [
     path('cmassiva/dashboard', cmassiva_index , name='cmassiva_dashboard'),
     path('logout', logoutUser, name='logout'),
-    path('cmassiva/geradorcarga', cmassiva_gerarcarga, name='cmassiva_gerarcarga')
+    path('cmassiva/geradorcarga', cmassiva_gerarcarga, name='cmassiva_gerarcarga'),
+    path('cmassiva/response', cmassiva_response, name='cmassiva_response')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

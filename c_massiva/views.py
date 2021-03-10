@@ -40,6 +40,9 @@ def cmassiva_gerarcarga(request):
 
     return render(request,'c_gerador.html', {'form':form})
 
+def cmassiva_response(request):
+    return render(request,'c_response.html')
+
 @login_required(login_url='/login')
 def logoutUser(request):
     logout(request)
