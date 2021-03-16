@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import UploadAlunoRel, UploadCarga
-from django.core.files.storage import FileSystemStorage
+from django.contrib import messages
 import os
-from .functions_pandas import gerarCargaMassiva, gerarCargaMassivaGenero, dividirCarga
+from .functions_pandas import gerarCargaMassiva, gerarCargaMassivaGenero, dividirCarga, juntarCarga
 
 from django.views.static import serve
 
@@ -54,24 +54,32 @@ def cmassiva_opcoes(request):
 
     if request.method == 'POST':
         form = UploadCarga(request.POST, request.FILES)
-        print(form)
+
         if form.is_valid():
-            csv_file = request.FILES['file']
             user = request.session['user']
 
             if request.POST['submit'] == 'dividir':
+                csv_file = request.FILES['file']
                 status = dividirCarga(csv_file, user)
+                if status:
+                    return render(request,'c_response.html')
+
+                messages.error("Erro ao ler o arquivo")
+
+            elif request.POST['submit'] == 'juntar':
+                files = request.FILES.getlist("file")
+                status = juntarCarga(files, user)
 
                 if status:
-                    print("OK")
+                    print("Carga combinada")
+                    filepath = 'c_massiva/uploads/'+user+'/carga_combinada.csv'
+                    return serve(request, os.path.basename(filepath), os.path.dirname(filepath))
 
-                print("Error")
+                messages.error("Erro ao ler o arquivo")
 
-            elif request.POST['submit'] == 'Checkup':
-                pass
             else:
+                csv_file = request.FILES['file']
                 pass
-
 
 
     return render(request, 'c_opcoes.html', {'form':form})

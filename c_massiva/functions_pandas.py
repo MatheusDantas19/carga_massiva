@@ -95,14 +95,26 @@ def dividirCarga(file, user):
         return 0
 
 
-    carga.loc[carga[carga.columns[8]] == 1].to_csv('c_massiva/uploads/'+user+'1ano.csv', index=False)
-    carga.loc[carga[carga.columns[8]] == 2].to_csv('c_massiva/uploads/'+user+'2ano.csv', index=False)
-    carga.loc[carga[carga.columns[8]] == 3].to_csv('c_massiva/uploads/'+user+'3ano.csv', index=False)
-    carga.loc[carga[carga.columns[8]] == 4].to_csv('c_massiva/uploads/'+user+'4ano.csv', index=False)
-    carga.loc[carga[carga.columns[8]] == 5].to_csv('c_massiva/uploads/'+user+'5ano.csv', index=False)
+    carga.loc[carga[carga.columns[8]] == 1].to_csv('c_massiva/uploads/'+user+'/1ano.csv', index=False)
+    carga.loc[carga[carga.columns[8]] == 2].to_csv('c_massiva/uploads/'+user+'/2ano.csv', index=False)
+    carga.loc[carga[carga.columns[8]] == 3].to_csv('c_massiva/uploads/'+user+'/3ano.csv', index=False)
+    carga.loc[carga[carga.columns[8]] == 4].to_csv('c_massiva/uploads/'+user+'/4ano.csv', index=False)
+    carga.loc[carga[carga.columns[8]] == 5].to_csv('c_massiva/uploads/'+user+'/5ano.csv', index=False)
 
     carga.loc[(carga[carga.columns[8]] != 1) & (carga[carga.columns[8]] != 2)
                     & (carga[carga.columns[8]] != 3) & (carga[carga.columns[8]] != 4)
-                    & (carga[carga.columns[8]] != 5)].to_csv('c_massiva/uploads/'+user+'Outros.csv', index=False)
+                    & (carga[carga.columns[8]] != 5)].to_csv('c_massiva/uploads/'+user+'/Outros.csv', index=False)
 
+    return 1
+
+def juntarCarga(file, user):
+
+    try:
+        combined_csv = pd.concat([pd.read_csv(f, encoding='utf-8') for f in file])
+
+    except IOError as e:
+        print("Erro ao ler o arquivo csv")
+        return 0
+
+    combined_csv.to_csv('c_massiva/uploads/'+user+'/carga_combinada.csv', index=False, encoding='utf-8-sig')
     return 1
