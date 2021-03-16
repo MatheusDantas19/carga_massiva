@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import UploadCarga
+from .forms import UploadAlunoRel, UploadCarga
 from django.core.files.storage import FileSystemStorage
 import os
-from .functions_pandas import gerarCargaMassiva
+from .functions_pandas import gerarCargaMassiva, gerarCargaMassivaGenero, dividirCarga
+
+from django.views.static import serve
+
 
 # Create your views here.
 
@@ -24,21 +27,55 @@ def cmassiva_index(request):
 
 @login_required(login_url='/login')
 def cmassiva_gerarcarga(request):
+    form = UploadAlunoRel()
+
+    if request.method == 'POST':
+        form = UploadAlunoRel(request.POST, request.FILES)
+        if form.is_valid():
+
+            csv_file = request.FILES['file']
+            choice = request.POST['choice']
+            user = request.session['user']
+
+            if(request.POST['submit'] == 'gc'):
+                status = gerarCargaMassiva(csv_file, user, choice)
+            else:
+                status = gerarCargaMassivaGenero(csv_file, user, choice)
+
+            print(status)
+            if status:
+                filepath = 'c_massiva/uploads/'+user+'/cargaGerada.csv'
+                return serve(request, os.path.basename(filepath), os.path.dirname(filepath))
+
+    return render(request,'c_gerador.html', {'form':form})
+
+def cmassiva_opcoes(request):
     form = UploadCarga()
 
     if request.method == 'POST':
-        form = UploadCarga(request.POST,request.FILES)
+        form = UploadCarga(request.POST, request.FILES)
+        print(form)
         if form.is_valid():
-            print("Valido")
-
             csv_file = request.FILES['file']
-            status = gerarCargaMassiva(csv_file, request.session['user'])
+            user = request.session['user']
 
-            if status:
+            if request.POST['submit'] == 'dividir':
+                status = dividirCarga(csv_file, user)
+
+                if status:
+                    print("OK")
+
+                print("Error")
+
+            elif request.POST['submit'] == 'Checkup':
+                pass
+            else:
                 pass
 
 
-    return render(request,'c_gerador.html', {'form':form})
+
+    return render(request, 'c_opcoes.html', {'form':form})
+
 
 def cmassiva_response(request):
     return render(request,'c_response.html')

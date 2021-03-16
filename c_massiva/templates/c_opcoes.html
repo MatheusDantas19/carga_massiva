@@ -1,0 +1,26 @@
+{% extends 'c_base.html' %}
+{% load static %}
+{% load crispy_forms_tags  %}
+
+{% block titulo %} Opções de carga massiva {% endblock titulo %}
+
+{% block conteudo %}
+
+<h1 class="text-center">Opções da Carga Massiva</h1>
+
+<p class="text-center"> Para gerar a carga massiva, basta fazer o envio do modelo alunorel.csv com os dados preenchidos
+</p>
+
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form|crispy}}
+
+    <div class="form-group">
+        <button class="btn btn-success" name="submit" type="submit" value="dividir">Dividir Carga Massiva</button>
+        <button class="btn btn-info" name="submit" type="submit" value="checkup">Checkup Carga Massiva</button>
+        <button class="btn btn-success" name="submit" type="submit" value="juntar">Juntar Carga Massiva</button>
+    </div>
+</form>
+
+{% endblock conteudo %}
