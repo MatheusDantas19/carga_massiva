@@ -53,7 +53,7 @@ def gerarCargaMassivaGenero(file, user, language):
         print("Erro ao ler o arquivo csv")
         return 0
 
-    banco = pd.read_csv('./banco.csv', encoding='utf-8')
+    banco = pd.read_csv('static/banco.csv', encoding='utf-8')
 
 
     carga = pd.DataFrame(
