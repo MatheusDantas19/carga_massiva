@@ -5,6 +5,7 @@ from .forms import UploadAlunoRel, UploadCarga
 from django.contrib import messages
 import os
 from .functions_pandas import gerarCargaMassiva, gerarCargaMassivaGenero, dividirCarga, juntarCarga
+from .functions_directory import clearDirectory, createDirectory
 
 from django.views.static import serve
 
@@ -14,14 +15,7 @@ from django.views.static import serve
 
 @login_required(login_url='/login')
 def cmassiva_index(request):
-    path = "c_massiva/uploads/"+request.session['user']+'/'
-
-    try:
-        os.mkdir(path)
-    except OSError:
-        print("Creation of the directory %s failed" % path)
-    else:
-        print("Successfully created the directory %s " % path)
+    createDirectory(request.session['user'])
 
     return render(request, 'c_dashboard.html')
 
@@ -37,6 +31,8 @@ def cmassiva_gerarcarga(request):
             choice = request.POST['choice']
             user = request.session['user']
 
+            clearDirectory(user)
+
             if(request.POST['submit'] == 'gc'):
                 status = gerarCargaMassiva(csv_file, user, choice)
             else:
@@ -49,6 +45,7 @@ def cmassiva_gerarcarga(request):
 
     return render(request,'c_gerador.html', {'form':form})
 
+@login_required(login_url='/login')
 def cmassiva_opcoes(request):
     form = UploadCarga()
 
@@ -57,12 +54,14 @@ def cmassiva_opcoes(request):
 
         if form.is_valid():
             user = request.session['user']
+            clearDirectory(user)
 
             if request.POST['submit'] == 'dividir':
                 csv_file = request.FILES['file']
                 status = dividirCarga(csv_file, user)
+
                 if status:
-                    return render(request,'c_response.html')
+                    return render(request,'c_response.html', {'user':user})
 
                 messages.error("Erro ao ler o arquivo")
 

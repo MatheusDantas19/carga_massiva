@@ -5,11 +5,11 @@ from django.conf import settings
 from .views import *
 
 urlpatterns = [
-    path('cmassiva/dashboard', cmassiva_index , name='cmassiva_dashboard'),
+    path('c_massiva/dashboard', cmassiva_index , name='cmassiva_dashboard'),
     path('logout', logoutUser, name='logout'),
-    path('cmassiva/geradorcarga', cmassiva_gerarcarga, name='cmassiva_gerarcarga'),
-    path('cmassiva/response', cmassiva_response, name='cmassiva_response'),
-    path('cmassiva/opcoes', cmassiva_opcoes, name='cmassiva_opcoes')
+    path('c_massiva/geradorcarga', cmassiva_gerarcarga, name='cmassiva_gerarcarga'),
+    path('c_massiva/response', cmassiva_response, name='cmassiva_response'),
+    path('c_massiva/opcoes', cmassiva_opcoes, name='cmassiva_opcoes')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

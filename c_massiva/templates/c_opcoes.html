@@ -14,13 +14,21 @@
 
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{form|crispy}}
 
-    <div class="form-group">
+    {{form.file.label}}
+    {{form.file}}
+
+<!--    {{form|crispy}}-->
+
+    <div class="form-group pt-2">
         <button class="btn btn-success" name="submit" type="submit" value="dividir">Dividir Carga Massiva</button>
         <button class="btn btn-info" name="submit" type="submit" value="checkup">Checkup Carga Massiva</button>
         <button class="btn btn-success" name="submit" type="submit" value="juntar">Juntar Carga Massiva</button>
     </div>
 </form>
+
+<script>
+    document.querySelector('.opcoes').classList.add('active')
+</script>
 
 {% endblock conteudo %}
