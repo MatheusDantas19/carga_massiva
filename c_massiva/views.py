@@ -1,17 +1,16 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from .forms import UploadAlunoRel, UploadCarga
 from django.contrib import messages
-import os
 from .functions_pandas import gerarCargaMassiva, gerarCargaMassivaGenero, dividirCarga, juntarCarga
 from .functions_directory import clearDirectory, createDirectory
 
 from django.views.static import serve
+import os
 
 
 # Create your views here.
-
 
 @login_required(login_url='/login')
 def cmassiva_index(request):
@@ -60,19 +59,16 @@ def cmassiva_opcoes(request):
                 csv_file = request.FILES['file']
                 status = dividirCarga(csv_file, user)
 
-                if status:
-                    return render(request,'c_response.html', {'user':user})
+                if status: return render(request,'c_response.html', {'user':user})
 
                 messages.error("Erro ao ler o arquivo")
 
             elif request.POST['submit'] == 'juntar':
                 files = request.FILES.getlist("file")
                 status = juntarCarga(files, user)
+                filepath = 'c_massiva/uploads/' + user + '/carga_combinada.csv'
 
-                if status:
-                    print("Carga combinada")
-                    filepath = 'c_massiva/uploads/'+user+'/carga_combinada.csv'
-                    return serve(request, os.path.basename(filepath), os.path.dirname(filepath))
+                if status: return serve(request, os.path.basename(filepath), os.path.dirname(filepath))
 
                 messages.error("Erro ao ler o arquivo")
 
